@@ -16,3 +16,9 @@ export const REDIRECT_OPTIONS = [
         "link": "https://www.google.com/search?q=Prophecies+of+the+Tiburtina+Sibyl"
       }
 ];
+
+
+export const COMPUTER_OPTIONS = ['enchantment', 'rune', 'vision', 'echoes'];
+
+export const CONTENT_OPTIONS = ['tales', 'glitch'];
+

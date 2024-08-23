@@ -1,17 +1,122 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import {Hero} from './images'; 
+import { Hero, Heart, Momon, OnePiece, Sound, Story1, Story2, Story3, Story4 } from './assets';
+import Storybook from './components/Storybook';
+import { REDIRECT_OPTIONS, COMPUTER_OPTIONS, CONTENT_OPTIONS } from "./constants";
 
 function App() {
-  
+  const [inputValue, setInputValue] = useState('');
+  const [content, setContent] = useState(null);
+  const [isStorybookOpen, setStorybookOpen] = useState(false);
+  const [storybookPages, setStorybookPages] = useState([]);
+
+  const handleRedirect = () => {
+    const matchedOption = REDIRECT_OPTIONS.find(option => option.prompt === inputValue.toUpperCase());
+    if (matchedOption) {
+      window.open(matchedOption.link, '_blank');
+    } else if (COMPUTER_OPTIONS.includes(inputValue.toLowerCase())) {
+      handleContentDisplay(inputValue);
+    } else if (CONTENT_OPTIONS.includes(inputValue.toLowerCase())) {
+      handleStorybookContent(inputValue.toLowerCase());
+    } else {
+      setContent(null);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleRedirect();
+  };
+
+  const handleContentDisplay = (input) => {
+    switch (input.toLowerCase()) {
+      case 'enchantment':
+        setContent(
+          <div className="animation-content">
+            <img src={Heart} className="animation-gif" alt="Heart" />
+          </div>
+        );
+        break;
+      case 'rune':
+        setContent(
+          <div className="text-content">
+            <p>OK, I see you now. Coming up from behind</p>
+          </div>
+        );
+        break;
+      case 'vision':
+        setContent(
+          <div className="video-content">
+            <video controls autoPlay>
+              <source src={Momon} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        );
+        break;
+      case 'echoes':
+        setContent(
+          <div className="audio-content">
+            <img src={Sound} className="nice-gif" alt="Sound" />
+            <audio controls autoPlay>
+              <source src={OnePiece} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        );
+        break;
+      default:
+        setContent(null);
+        break;
+    }
+  };
+
+  const handleStorybookContent = (input) => {
+    switch (input) {
+      case 'tales':
+        setStorybookPages([
+          {Story1},
+          {Story2},
+          {Story3},
+          {Story4}
+        ]);
+        break;
+      case 'glitch':
+        setStorybookPages([
+          {Story1}
+        ]);
+        break;
+      default:
+        setStorybookPages([]);
+        break;
+    }
+    setStorybookOpen(true);
+  };
+
+  const handleCloseStorybook = () => {
+    setStorybookOpen(false);
+  };
+
   return (
     <div className="App">
       <div className="hero-container">
-        <img src={Hero} className="hero-gif" alt="Hero" />
-        <input type="text" className="overlay-input" placeholder="?" />
+        <img src={Hero} className="nice-gif" alt="Hero" />
+        <div className="content-overlay">
+          {content}
+        </div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="overlay-input"
+            placeholder="?"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button type="submit" className="submit-button"></button>
+        </form>
+        <Storybook pages={storybookPages} isOpen={isStorybookOpen} onClose={handleCloseStorybook} />
       </div>
     </div>
-    
   );
 }
 

@@ -1,6 +1,5 @@
-// Star.js
 import React from 'react';
-import './Star.css'; // Create a CSS file for styling the star
+import './Star.css'; 
 
 const Star = ({ position }) => {
   return (

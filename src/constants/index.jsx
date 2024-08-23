@@ -25,4 +25,18 @@ export const ETERNITY_OPTION = 'eternity';
 
 export const STAR_OPTION = 'star';
 
+export const ALL_PROMPTS = [
+    "salut",    
+    "epic",     
+    "lore",     
+    "oracle",   
+    "enchantment",  
+    "rune",         
+    "vision",       
+    "echoes",       
+    "tales",        
+    "glitch",       
+    "eternity",    
+    "star"          
+];
 

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Hero, Heart, Momon, OnePiece, Sound, Story1, Story2, Story3, Story4, Glitch, Eternity } from './assets';
-import Storybook from './components/Storybook';
-import { REDIRECT_OPTIONS, COMPUTER_OPTIONS, CONTENT_OPTIONS, ETERNITY_OPTION, STAR_OPTION } from "./constants";
-import Star from './components/Star'; // Import the Star component
+import {Storybook, Star} from './components';
+import { REDIRECT_OPTIONS, COMPUTER_OPTIONS, CONTENT_OPTIONS, ETERNITY_OPTION, STAR_OPTION, ALL_PROMPTS } from "./constants";
 
 function App() {
   const [inputValue, setInputValue] = useState('');
@@ -12,7 +11,8 @@ function App() {
   const [storybookPages, setStorybookPages] = useState([]);
   const [clickEternity, setClickEternity] = useState(0);
   const [clickStar, setClickStar] = useState(0);
-  const [stars, setStars] = useState([]); // State to hold stars
+  const [stars, setStars] = useState([]); 
+  const [revealedText, setRevealedText] = useState('');
 
   const handleRedirect = () => {
     const matchedOption = REDIRECT_OPTIONS.find(option => option.prompt === inputValue.toUpperCase());
@@ -30,8 +30,8 @@ function App() {
       setClickEternity(prev => {
         const newCount = prev + 1;
         if (newCount === 3) {
-          window.open(Eternity, '_blank'); // Open Heart GIF in a new tab
-          return 0; // Reset count after opening
+          window.open(Eternity, '_blank'); 
+          return 0; 
         }
         return newCount;
       });
@@ -53,7 +53,7 @@ function App() {
       setStorybookOpen(false);
       setClickEternity(0);
       setClickStar(0);
-      setStars([]); // Reset stars when input is invalid
+      setStars([]); 
     }
   };
 
@@ -132,28 +132,38 @@ function App() {
   };
 
   const addStars = (clickCount) => {
-    const numStars = Math.floor(Math.random() * 4) + 5; // Random number of stars between 2 and 5
+    const numStars = Math.floor(Math.random() * 4) + 5; 
     const newStars = [];
 
     for (let i = 0; i < numStars; i++) {
       const starPosition = {
-        x: Math.random() * window.innerWidth, // Random x position
-        y: Math.random() * window.innerHeight // Random y position
+        x: Math.random() * window.innerWidth, 
+        y: Math.random() * window.innerHeight 
       };
-      newStars.push(starPosition); // Add new star position
+      newStars.push(starPosition); 
     }
 
-    setStars(prevStars => [...prevStars, ...newStars]); // Add new stars to the existing array
+    setStars(prevStars => [...prevStars, ...newStars]); 
   };
 
+  const handleScreenClick = (e) => {
+    const { clientX, clientY, target } = e;
+
+    if (clientX < window.innerWidth * 0.2 || clientY > window.innerHeight * 0.8) {
+      setRevealedText(`You discovered the secret at the bottom!\n${ALL_PROMPTS.map(prompt => prompt.toUpperCase()).join(', ')}`);
+
+    } else {
+      setRevealedText(''); 
+    }
+  };
 
   return (
-    <div className="App">
+    <div className="App" onClick={handleScreenClick}>
       <div className="hero-container">
         <img src={Hero} className="nice-gif" alt="Hero" />
         <div className="content-overlay">
           {content}
-         
+          {revealedText && <div className="revealed-text">{revealedText}</div>}
         </div>
         <form onSubmit={handleSubmit}>
           <input

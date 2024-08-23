@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Hero, Heart, Momon, OnePiece, Sound, Story1, Story2, Story3, Story4 } from './assets';
+import { Hero, Heart, Momon, OnePiece, Sound, Story1, Story2, Story3, Story4, Glitch, Eternity } from './assets';
 import Storybook from './components/Storybook';
-import { REDIRECT_OPTIONS, COMPUTER_OPTIONS, CONTENT_OPTIONS } from "./constants";
+import { REDIRECT_OPTIONS, COMPUTER_OPTIONS, CONTENT_OPTIONS, ETERNITY_OPTION, STAR_OPTION } from "./constants";
+import Star from './components/Star'; // Import the Star component
 
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [content, setContent] = useState(null);
   const [isStorybookOpen, setStorybookOpen] = useState(false);
   const [storybookPages, setStorybookPages] = useState([]);
+  const [clickEternity, setClickEternity] = useState(0);
+  const [clickStar, setClickStar] = useState(0);
+  const [stars, setStars] = useState([]); // State to hold stars
 
   const handleRedirect = () => {
     const matchedOption = REDIRECT_OPTIONS.find(option => option.prompt === inputValue.toUpperCase());
@@ -17,9 +21,39 @@ function App() {
     } else if (COMPUTER_OPTIONS.includes(inputValue.toLowerCase())) {
       handleContentDisplay(inputValue);
     } else if (CONTENT_OPTIONS.includes(inputValue.toLowerCase())) {
-      handleStorybookContent(inputValue.toLowerCase());
-    } else {
       setContent(null);
+      handleStorybookContent(inputValue.toLowerCase());
+    } else if(inputValue.toLowerCase()==ETERNITY_OPTION){
+      setContent(null);
+      setStorybookOpen(false);
+      setClickStar(0);
+      setClickEternity(prev => {
+        const newCount = prev + 1;
+        if (newCount === 3) {
+          window.open(Eternity, '_blank'); // Open Heart GIF in a new tab
+          return 0; // Reset count after opening
+        }
+        return newCount;
+      });
+    }
+    else if(inputValue.toLowerCase()==STAR_OPTION){
+      setContent(null);
+      setStorybookOpen(false);
+      setClickEternity(0);
+      setClickStar(prev => {
+        const newCount = prev + 1;
+        if (newCount <= 5) {
+          addStars(newCount);
+        }
+        return newCount;
+      });
+    }
+    else{
+      setContent(null);
+      setStorybookOpen(false);
+      setClickEternity(0);
+      setClickStar(0);
+      setStars([]); // Reset stars when input is invalid
     }
   };
 
@@ -83,7 +117,7 @@ function App() {
         break;
       case 'glitch':
         setStorybookPages([
-          {Story1}
+          {Glitch}
         ]);
         break;
       default:
@@ -97,12 +131,29 @@ function App() {
     setStorybookOpen(false);
   };
 
+  const addStars = (clickCount) => {
+    const numStars = Math.floor(Math.random() * 4) + 5; // Random number of stars between 2 and 5
+    const newStars = [];
+
+    for (let i = 0; i < numStars; i++) {
+      const starPosition = {
+        x: Math.random() * window.innerWidth, // Random x position
+        y: Math.random() * window.innerHeight // Random y position
+      };
+      newStars.push(starPosition); // Add new star position
+    }
+
+    setStars(prevStars => [...prevStars, ...newStars]); // Add new stars to the existing array
+  };
+
+
   return (
     <div className="App">
       <div className="hero-container">
         <img src={Hero} className="nice-gif" alt="Hero" />
         <div className="content-overlay">
           {content}
+         
         </div>
         <form onSubmit={handleSubmit}>
           <input
@@ -116,6 +167,9 @@ function App() {
         </form>
         <Storybook pages={storybookPages} isOpen={isStorybookOpen} onClose={handleCloseStorybook} />
       </div>
+      {stars.map((position, index) => (
+            <Star key={index} position={position} />
+          ))}
     </div>
   );
 }

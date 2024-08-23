@@ -1,0 +1,55 @@
+/* Storybook.css */
+.storybook-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  gap: 200px;
+}
+
+.storybook-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+
+}
+
+.storybook-content {
+  background: white;
+  position: relative; /* Allows positioning of controls */
+  width: 600px; /* Fixed width */
+  height: 400px; /* Fixed height */
+  padding: 20px; /* Add padding to prevent overlap */
+}
+
+.story-image {
+  width: 100%; /* Make the image fill the container */
+  height: 100%; /* Make the image fill the container */
+  object-fit: cover; /* Maintain aspect ratio, cover the area */
+}
+
+.storybook-controls {
+  background: white;
+  padding: 20px; /* Add padding to the controls */
+}
+
+.storybook-controls .zoom-controls {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  justify-content: flex-end; /* Align buttons to the right */
+  margin-bottom: 10px; /* Add some space between zoom and navigation controls */
+}
+
+.storybook-controls .navigation-controls {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  justify-content: flex-end; /* Align buttons to the right */
+}

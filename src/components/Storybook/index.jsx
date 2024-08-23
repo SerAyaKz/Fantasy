@@ -1,49 +1,60 @@
-// src/components/Storybook.js
-import React from 'react';
-import Slider from 'react-slick';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import './style.css';  // Ensure this CSS file is created for styling
+import React, { useState } from 'react';
+import './Storybook.css'; 
 
 const Storybook = ({ pages, isOpen, onClose }) => {
-  if (!isOpen || !pages || pages.length === 0) return null;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [scale, setScale] = useState(1);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+  if (!isOpen) return null;
+
+  const handleNextPage = () => {
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleZoomIn = () => {
+    setScale((prevScale) => Math.min(prevScale + 0.1, 3)); 
+  };
+
+  const handleZoomOut = () => {
+    setScale((prevScale) => Math.max(prevScale - 0.1, 1)); 
+  };
+
+  const handleClose = () => {
+    onClose();
+    setCurrentPage(0); 
+    setScale(1); 
+  };
+ 
   return (
     <div className="storybook-overlay">
-      <div className="storybook-content">
-        <button className="close-btn" onClick={onClose}>Close</button>
-        <TransformWrapper
-          defaultScale={1}
-          defaultPositionX={0}
-          defaultPositionY={0}
-        >
-          {({ zoomIn, zoomOut, resetTransform }) => (
-            <>
-              <div className="zoom-controls">
-                <button className="zoom-btn" onClick={zoomIn}>Zoom In</button>
-                <button className="zoom-btn" onClick={zoomOut}>Zoom Out</button>
-                <button className="zoom-btn" onClick={resetTransform}>Reset</button>
-              </div>
-              <TransformComponent>
-                <Slider {...settings}>
-                  {pages.map((page, index) => (
-                    <div key={index} className="slide">
-                      <img src={page[`Story${index + 1}`]} alt={`Page ${index + 1}`} className="storybook-image" />
-                    </div>
-                  ))}
-                </Slider>
-              </TransformComponent>
-            </>
-          )}
-        </TransformWrapper>
+      <div className="storybook-content" style={{ transform: `scale(${scale})` }}>
+        {pages.length > 2 && (
+          <img src={pages[currentPage][`Story${currentPage + 1}`]} alt={`Story ${currentPage + 1}`} className="story-image" />
+        )}
+        {pages.length <= 1 && (
+          <img src={pages[currentPage][`Glitch`]} alt={`Story ${currentPage + 1}`} className="story-image" />
+        )}
+        
       </div>
+      <div className="storybook-controls">
+          <div className="zoom-controls">
+            <button onClick={handleZoomIn}>Zoom In</button>
+            <button onClick={handleZoomOut}>Zoom Out</button>
+            <button onClick={handleClose}>Close</button>
+          </div>
+          <div className="navigation-controls">
+            <button onClick={handlePrevPage} disabled={currentPage === 0}>Previous</button>
+            <button onClick={handleNextPage} disabled={currentPage === pages.length - 1}>Next</button>
+          </div>
+        </div>
     </div>
   );
 };

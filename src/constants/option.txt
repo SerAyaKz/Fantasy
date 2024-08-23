@@ -1,19 +1,9 @@
-Input: "Tales"
-
-Mechanic: Opens a story that you can read and close on the website.
-Details: Opens a modal or overlay with an illustrated fantasy scene or book cover, featuring a short story about a mythical hero or ancient prophecy. The user can scroll through the text and close the modal when finished.
-
-Input: "Glitch"
-
-Mechanic: Opens a glitch image that you can see and close on the website.
-Details: Displays a distorted image of a corrupted magical artifact or map, giving a surreal or eerie effect. The image can be closed by the user.
 
 
 
 
 
-
-Input: "Artifact"
+Input: "Eternity"
 
 Mechanic: Spams prompts and shows an image in another page in the prompt.
 Details: Opens a series of prompts with descriptions of mythical artifacts like a "Crystal of Eternity" or "Sword of Destiny." The final prompt reveals a detailed image of one of these artifacts.

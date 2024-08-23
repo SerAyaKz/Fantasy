@@ -17,8 +17,12 @@ export const REDIRECT_OPTIONS = [
       }
 ];
 
-
 export const COMPUTER_OPTIONS = ['enchantment', 'rune', 'vision', 'echoes'];
 
 export const CONTENT_OPTIONS = ['tales', 'glitch'];
+
+export const ETERNITY_OPTION = 'eternity';
+
+export const STAR_OPTION = 'star';
+
 
